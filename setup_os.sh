@@ -12,6 +12,9 @@ brew install tmux
 brew install docker
 brew install docker-compose
 
+brew install yarn
+# Python stuff here
+
 brew install --cask spotify
 brew install --cask firefox
 brew install --cask webstorm
