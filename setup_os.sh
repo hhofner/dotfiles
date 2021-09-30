@@ -15,6 +15,7 @@ brew install docker-compose
 brew install yarn
 # Python stuff here
 
+brew install spotify-tui
 brew install --cask anki
 brew install --cask spotify
 brew install --cask firefox
