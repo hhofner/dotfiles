@@ -16,6 +16,7 @@ brew install yarn
 # Python stuff here
 
 brew install spotify-tui
+# Add update for spotify-tui here
 brew install --cask anki
 brew install --cask spotify
 brew install --cask firefox
