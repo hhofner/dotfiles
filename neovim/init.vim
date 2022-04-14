@@ -1,4 +1,4 @@
-" Specify a directory for plugins
+for plugins
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.config/nvim/plugged/')
@@ -152,10 +152,10 @@ nmap <c-c> "+y
 vmap <c-c> "+y
 nmap <c-v> "+p
 
-
 nnoremap <c-b> :FzfLua buffers<CR>
 nnoremap <c-p> :FzfLua git_files<CR>
 nnoremap <c-d> :Dash<CR>
+nnoremap <c-f> :FzfLua 
 " Mouse support for neovim
 set mouse=a
 
