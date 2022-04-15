@@ -1,4 +1,4 @@
-for plugins
+" Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.config/nvim/plugged/')
@@ -51,13 +51,11 @@ inoremap <silent><expr> <Tab>
   " vim wiki 
   Plug 'vimwiki/vimwiki'
 
-  " melange color scheme
-  Plug 'savq/melange'
-  Plug 'jnurmine/Zenburn'
-  Plug 'EdenEast/nightfox.nvim'
-  Plug 'sainnhe/everforest'
-
+  " COLOR SCHEMES  ~~~~~~~~~~~
   Plug 'ray-x/starry.nvim'
+  Plug 'cocopon/iceberg.vim'
+  Plug 'Mofiqul/adwaita.nvim'
+  " ~~~~~~~~~~~
 
   " Rust Language Syntax
   Plug 'rust-lang/rust.vim'
@@ -88,6 +86,8 @@ Plug 'vim-airline/vim-airline'
 " Svelte 
 Plug 'leafOfTree/vim-svelte-plugin'
 
+Plug 'lewis6991/gitsigns.nvim'
+
 Plug 'github/copilot.vim'
 
 Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
@@ -98,11 +98,11 @@ call plug#end()
 set termguicolors
 " Some other ones I liked üëá
 " melange, everforest, zenburn
-colorscheme everforest
+colorscheme adwaita
 let g:colorscheme_changer_colors=['melange', 'everforest', 'zenburn']
 
 " Font
-set guifont=MesloLGL\ Nerd\ Font:h12
+set guifont=MesloLGL\ Nerd\ Font:h13
 let g:font_changer_fonts=['MesloLGL\ Nerd\ Font:h12', 'JetBrainsMono\ Nerd\ Font:h12']
 nmap <leader>cf :ChangeFont<CR>
 
@@ -156,10 +156,22 @@ nnoremap <c-b> :FzfLua buffers<CR>
 nnoremap <c-p> :FzfLua git_files<CR>
 nnoremap <c-d> :Dash<CR>
 nnoremap <c-f> :FzfLua 
+nnoremap <c-g> <CMD>Gitsigns blame_line<CR>
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
 " Mouse support for neovim
 set mouse=a
 
 set termencoding=utf-8
 set encoding=utf-8
 
+lua require('gitsigns').setup()
 lua require('dash-setup')
