@@ -22,10 +22,7 @@ call plug#begin('~/.config/nvim/plugged/')
   Plug 'PyGamer0/font_changer.vim'
   Plug 'PyGamer0/colorscheme_changer.vim'
 
-  	" Visually display indent levels
-	Plug 'nathanaelkane/vim-indent-guides'
-  let g:indent_guides_enable_on_vim_startup = 1
-
+  Plug 'lukas-reineke/indent-blankline.nvim'
   " For relative numbers, but a bit smarter "
 "  Plug 'ericbn/vim-relativize'
 
@@ -51,10 +48,11 @@ inoremap <silent><expr> <Tab>
   " vim wiki 
   Plug 'vimwiki/vimwiki'
 
-  " COLOR SCHEMES  ~~~~~~~~~~~
+  " COLOR SCHEMES/THEMES  ~~~~~~~~~~~
   Plug 'ray-x/starry.nvim'
   Plug 'cocopon/iceberg.vim'
   Plug 'Mofiqul/adwaita.nvim'
+  Plug 'jonathanfilip/vim-lucius'
   " ~~~~~~~~~~~
 
   " Rust Language Syntax
@@ -81,7 +79,7 @@ let g:vim_svelte_plugin_use_typescript = 1
 Plug 'tpope/vim-fugitive'
 
 " That litle status bar below
-Plug 'vim-airline/vim-airline'
+Plug 'glepnir/galaxyline.nvim', {'branch': 'main'}
 
 " Svelte 
 Plug 'leafOfTree/vim-svelte-plugin'
@@ -98,11 +96,11 @@ call plug#end()
 set termguicolors
 " Some other ones I liked üëá
 " melange, everforest, zenburn
-colorscheme adwaita
+colorscheme lucius
 let g:colorscheme_changer_colors=['melange', 'everforest', 'zenburn']
 
 " Font
-set guifont=MesloLGL\ Nerd\ Font:h13
+set guifont=JetBrainsMono\ Nerd\ Font:h15
 let g:font_changer_fonts=['MesloLGL\ Nerd\ Font:h12', 'JetBrainsMono\ Nerd\ Font:h12']
 nmap <leader>cf :ChangeFont<CR>
 
@@ -174,4 +172,5 @@ set termencoding=utf-8
 set encoding=utf-8
 
 lua require('gitsigns').setup()
+" Only for mac unfortunately
 lua require('dash-setup')
