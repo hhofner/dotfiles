@@ -17,6 +17,7 @@ call plug#begin('~/.config/nvim/plugged/')
 
 	Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
+  Plug 'tpope/vim-surround'
 
   " Quick changers
   Plug 'PyGamer0/font_changer.vim'
@@ -53,6 +54,8 @@ inoremap <silent><expr> <Tab>
   Plug 'cocopon/iceberg.vim'
   Plug 'Mofiqul/adwaita.nvim'
   Plug 'jonathanfilip/vim-lucius'
+  Plug 'jnurmine/Zenburn'
+  Plug 'chriskempson/base16-vim'
   " ~~~~~~~~~~~
 
   " Rust Language Syntax
@@ -96,7 +99,7 @@ call plug#end()
 set termguicolors
 " Some other ones I liked üëá
 " melange, everforest, zenburn
-colorscheme lucius
+colorscheme base16-atlas
 let g:colorscheme_changer_colors=['melange', 'everforest', 'zenburn']
 
 " Font
@@ -172,5 +175,4 @@ set termencoding=utf-8
 set encoding=utf-8
 
 lua require('gitsigns').setup()
-" Only for mac unfortunately
 lua require('dash-setup')
