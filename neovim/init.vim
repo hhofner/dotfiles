@@ -1,54 +1,44 @@
-" Specify a directory for plugins
-" - For Neovim: stdpath('data') . '/plugged'
-" - Avoid using standard Vim directory names like 'plugin'
+set termguicolors
 call plug#begin('~/.config/nvim/plugged/')
 
-  Plug 'kyazdani42/nvim-web-devicons'
-  Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
-  Plug 'kyazdani42/nvim-tree.lua'
-
-	" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-  " Aligns things nicely -- mostly for writng and not coding
-	Plug 'junegunn/vim-easy-align'
-  Plug 'godlygeek/tabular'
-  Plug 'plasticboy/vim-markdown'
-
-  " Show changes in file "
-  Plug 'mhinz/vim-signify'
-
+  " Tim Pope Section
 	Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-fugitive'
 
-  " Quick changers
-  Plug 'PyGamer0/font_changer.vim'
-  Plug 'PyGamer0/colorscheme_changer.vim'
+  " Visuals / UI
+  Plug 'feline-nvim/feline.nvim'
+  Plug 'kyazdani42/nvim-tree.lua'
 
-  Plug 'lukas-reineke/indent-blankline.nvim'
-  " For relative numbers, but a bit smarter "
-"  Plug 'ericbn/vim-relativize'
+  " Git
+  Plug 'lewis6991/gitsigns.nvim'
 
-  " Typescript intellisense "
+  " Text related
+	Plug 'junegunn/vim-easy-align' 
+  Plug 'vim-scripts/auto-pairs-gentle'
+
+  " Intellisense, syntax, etc
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " use <Tab> key to trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
+  Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
+  Plug 'prettier/vim-prettier', {
+    \ 'do': 'yarn install',
+    \ 'for': ['javascript', 'typescript', 'css', 'json', 'graphql', 'markdown', 'svelte', 'yaml', 'html'] }
+  Plug 'sheerun/vim-polyglot'
+  let g:vim_svelte_plugin_use_typescript = 1
 
-  " NERDCommenter, to easily comment out lines
-  " Allows for comment, nesting, etc
-  Plug 'preservim/nerdcommenter'
-
-  " Goyo Vim, for `concentration mode` typing
-  Plug 'junegunn/goyo.vim'
-
-  " vim wiki 
+  " Utilities
   Plug 'vimwiki/vimwiki'
+  Plug 'github/copilot.vim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'akinsho/toggleterm.nvim', {'tag' : 'v1.*'}
+  Plug 'numToStr/Comment.nvim'
+
+  " Misc
+  Plug 'leafOfTree/vim-svelte-plugin'
+  Plug 'lukas-reineke/indent-blankline.nvim'
+  Plug 'godlygeek/tabular'
+  Plug 'plasticboy/vim-markdown'
 
   " COLOR SCHEMES/THEMES  ~~~~~~~~~~~
   Plug 'ray-x/starry.nvim'
@@ -57,94 +47,59 @@ inoremap <silent><expr> <Tab>
   Plug 'jonathanfilip/vim-lucius'
   Plug 'jnurmine/Zenburn'
   Plug 'chriskempson/base16-vim'
+  Plug 'arzg/vim-colors-xcode'
+  Plug 'sonph/onehalf', { 'rtp': 'vim' }
+  Plug 'bluz71/vim-moonfly-colors'
   " ~~~~~~~~~~~
-
-  " Rust Language Syntax
-  Plug 'rust-lang/rust.vim'
-
-  Plug 'romgrk/barbar.nvim'
-
-  " insert or delete parenthesis in pair
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  Plug 'vim-scripts/auto-pairs-gentle'
-
-  " Prettier, formatting
-  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  " post install (yarn install | npm install) then load plugin only for editing supported files
-  Plug 'prettier/vim-prettier', {
-    \ 'do': 'yarn install',
-    \ 'for': ['javascript', 'typescript', 'css', 'json', 'graphql', 'markdown', 'svelte', 'yaml', 'html'] }
-
-  " Syntax highlithing
-  Plug 'sheerun/vim-polyglot'
-  let g:vim_svelte_plugin_use_typescript = 1
-
-  " Adding Git support
-  Plug 'tpope/vim-fugitive'
-
-  " That litle status bar below
-  Plug 'glepnir/galaxyline.nvim', {'branch': 'main'}
-
-  " Svelte 
-  Plug 'leafOfTree/vim-svelte-plugin'
-
-  Plug 'lewis6991/gitsigns.nvim'
-
-  Plug 'github/copilot.vim'
 
   Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
 
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
-  Plug 'kyazdani42/nvim-tree.lua'
-
 call plug#end()
 
-let g:nvim_tree_show_icons = {
-    \ 'git': 1,
-    \ 'folders': 1,
-    \ 'files': 1,
-    \ 'folder_arrows': 0,
-    \ }
-
+"SET UP LUA PLUGINS
 lua << EOF
-require'nvim-tree'.setup()
+  --require'nvim-tree'.setup()
+  require('Comment').setup()
+  require('feline').setup()
+  require('toggleterm').setup{
+    open_mapping = [[<c-\>]],
+    terminal_mappings = true
+  }
 EOF
 
-"""""""""""""""""""" COLORS AND SCHEMES AND THINGS
-""""""""""""""""""""""""""""
-set termguicolors
-" Some other ones I liked üëá
-" melange, everforest, zenburn
-colorscheme base16-zenburn
-let g:colorscheme_changer_colors=['melange', 'everforest', 'zenburn']
+"""" MY DEFAULTS 
+let mapleader = ","
+set hidden
+set number relativenumber
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+syntax enable
+filetype plugin indent on
 
-" Font
-set guifont=JetBrainsMono\ Nerd\ Font:h15
-let g:font_changer_fonts=['MesloLGL\ Nerd\ Font:h12', 'JetBrainsMono\ Nerd\ Font:h12']
-nmap <leader>cf :ChangeFont<CR>
+colorscheme moonfly
+set guifont=Input\ Mono:h13
+" removes background
+"highlight Normal ctermbg=NONE guibg=NONE 
 
-" Update time for vim-signify "
-set updatetime=100
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+  inoremap <silent><expr> <Tab>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<Tab>" :
+        \ coc#refresh()
 
 " Vim Wiki stuff
 let g:vimwiki_list = [{'path': '~/Documents/Personal/my-wiki/', 'syntax':'markdown'}]
 let g:vimwiki_folding = 'custom'
 let g:marked_filetypes = ["markdown", "mkd", "ghmarkdown", "vimwiki"]
 
-" For showing relative numbers (vim-relativize) "
-set number relativenumber
-
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
-
-syntax enable
-filetype plugin indent on
-
 " nvmtree LUA
 let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
+let g:nvim_tree_hijack_netrw = 1
 let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
 let g:nvim_tree_root_folder_modifier = ':~' "This is the default. See :help filename-modifiers for more options
 let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
@@ -153,7 +108,7 @@ let g:nvim_tree_icon_padding = ' ' "one space by default, used for rendering the
 let g:nvim_tree_symlink_arrow = ' >> ' " defaults to ' ? '. used as a separator between symlinks' source and target.
 let g:nvim_tree_respect_buf_cwd = 1 "0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
 let g:nvim_tree_create_in_closed_folder = 1 "0 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
-let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } " List of filenames that gets highlighted with NvimTreeSpecialFile
+let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1, 'package.json': 1} " List of filenames that gets highlighted with NvimTreeSpecialFile
 let g:nvim_tree_show_icons = {
     \ 'git': 1,
     \ 'folders': 0,
@@ -173,6 +128,7 @@ let g:nvim_tree_show_icons = {
 nnoremap <C-n> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
 nnoremap <leader>n :NvimTreeFindFile<CR>
+
 " More available functions:
 " NvimTreeOpen
 " NvimTreeClose
@@ -182,11 +138,6 @@ nnoremap <leader>n :NvimTreeFindFile<CR>
 " NvimTreeCollapse
 " NvimTreeCollapseKeepBuffers
 
-" a list of groups can be found at `:help nvim_tree_highlight`
-highlight NvimTreeFolderIcon guibg=blue
-
-
-
 " Coc specific
 " Coc Code Navigation
 " GoTo code navigation.
@@ -195,6 +146,10 @@ nmap <silent> vgd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+"autocmd User CocOpenFloat call nvim_win_set_config(g:coc_last_float_win, {'relative': 'editor', 'row': 0, 'col': 0})
+"autocmd User CocOpenFloat call nvim_win_set_width(g:coc_last_float_win, 9999)
+
+
 
 " Format on Save
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
@@ -205,7 +160,6 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Change the <leader> key to ',' and add a visual queue of when pressed
 " Remember: need to press the next command within 1000ms (default)
-let mapleader = ","
 
 " Copying and pasting for NeoVide
 " v -> visual
