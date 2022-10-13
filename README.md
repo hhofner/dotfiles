@@ -18,6 +18,8 @@ failure of "vimdate" theme)
 - I don't care about keybindings (as much).
 - neovim needs to look pretty so I'm always switching themes and fonts. Oh did I just say that?
 - vim-surround is perfect and I keep thinking it's part of neovim and not a plugin
+- my favorite fonts are probably jetbrains-mono & input mono. input mono though needs to be patched
+for icons and I dont got time for that.
 
 ## Only Neovim?
 While I've used tmux before I don't really see the benefit. iTerm does everything I need,
