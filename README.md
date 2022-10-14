@@ -20,6 +20,7 @@ failure of "vimdate" theme)
 - vim-surround is perfect and I keep thinking it's part of neovim and not a plugin
 - my favorite fonts are probably jetbrains-mono & input mono. input mono though needs to be patched
 for icons and I dont got time for that.
+- I like, no *need* auto-format on save. Not really too opiniated on style. Usually use Prettier, but I guess at times it feels too much indented. At some point I'd like to give a crack at making my own eslint driven styling rules.
 
 ## Only Neovim?
 While I've used tmux before I don't really see the benefit. iTerm does everything I need,
