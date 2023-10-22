@@ -1,41 +1,11 @@
 --[[
 
 =====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
+==================== Hans Hofner's Neovim Config ====================
 =====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-  And then you can explore or search through `:help lua-guide`
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
 --]]
 
+vim.o.guicursor = "n-v-c-sm:block,n-v:blinkon100,i-ci-ve:ver25-Cursor,r-cr-o:hor20"
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -65,9 +35,9 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  'folke/zen-mode.nvim',
+  'folke/twilight.nvim',
 
-  'github/copilot.vim',
-  'wakatime/vim-wakatime',
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
@@ -75,6 +45,8 @@ require('lazy').setup({
   'tpope/vim-speeddating',
   'tpope/vim-surround',
 
+  -- Git blame
+  'f-person/git-blame.nvim',
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
@@ -96,38 +68,77 @@ require('lazy').setup({
     },
   },
 
+  -- Pomodoro
+  'dbinagi/nomodoro',
+
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
+    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+  },
+  {'romgrk/barbar.nvim',
     dependencies = {
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-    }
+      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function() vim.g.barbar_auto_setup = false end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+    version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
 
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
+  { -- Adds git releated signs to the gutter, as well as utilities for managing changes
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      -- See `:help gitsigns.txt`
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+    },
+  },
 
-   { -- Adds git releated signs to the gutter, as well as utilities for managing changes
-     'lewis6991/gitsigns.nvim',
-   },
-
+  { -- Theme inspired by Atom
+    'navarasu/onedark.nvim',
+    --priority = 1000,
+    --config = function()
+    --  vim.cmd.colorscheme 'onedark'
+    -- end,
+  },
   {
     'sainnhe/everforest',
-    config = function()
-      vim.cmd.colorscheme 'everforest'
-     end,
+  },
+  {
+    'Shatur/neovim-ayu',
+    -- config = function()
+    --   vim.cmd.colorscheme 'ayu-mirage' 
+    -- end,
   },
   {
     'rose-pine/neovim',
-    -- config = function()
-    --   vim.cmd.colorscheme 'rose-pine'
-    --  end,
+    config = function()
+      vim.cmd.colorscheme 'rose-pine'
+     end,
   },
   {
     'savq/melange-nvim',
     -- priority = 1000,
     -- config = function()
     --   vim.cmd.colorscheme 'melange'
+    --  end,
+  },
+  {
+    'danilo-augusto/vim-afterglow',
+    -- config = function()
+    --   vim.cmd.colorscheme 'afterglow'
     --  end,
   },
 
@@ -148,8 +159,9 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
-      char = '┊',
       show_trailing_blankline_indent = false,
+      show_current_context = true,
+      show_current_context_start = true,
     },
   },
 
@@ -199,10 +211,33 @@ require('lazy').setup({
   {
     'pacha/vem-tabline',
   },
+  {
+    'nvim-lua/plenary.nvim'
+  },
+  {
+    'ThePrimeagen/harpoon'
+  },
 
   {
     'kevinhwang91/nvim-ufo', dependencies= { 'kevinhwang91/promise-async' }
-  }
+  },
+  {
+    "2nthony/vitesse.nvim",
+    dependencies = {
+      "tjdevries/colorbuddy.nvim"
+    },
+  },
+  {
+    'stevearc/aerial.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+       "nvim-treesitter/nvim-treesitter",
+       "nvim-tree/nvim-web-devicons"
+  },
+  { "zbirenbaum/copilot.lua" },
+  { "nvim-tree/nvim-tree.lua" }
+}
   --{ import = 'custom.plugins' },
 }, {})
 
@@ -218,6 +253,11 @@ vim.wo.number = true
 -- Enable mouse mode
 vim.o.mouse = 'a'
 vim.o.relativenumber = true
+
+-- No idea what this is doing but hilights maybe current line
+vim.opt.list = true
+vim.opt.listchars:append "space:⋅"
+vim.opt.listchars:append "eol:↴"
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -258,8 +298,9 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- vim.keymap.set('ctrl', 'b', 
 
-require('gitsigns').setup()
+require("copilot").setup()
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -270,6 +311,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
+
+-- [[ Configure Nomodoro ]]
+require('nomodoro').setup({
+    work_time = 30,
+    break_time = 5,
+    menu_available = true,
+    texts = {
+        on_break_complete = "Let's get that bread!",
+        on_work_complete = "Time is up!",
+        status_icon = "羽",
+        timer_format = '!%0M:%0S' -- To include hours: '!%0H:%0M:%0S'
+    },
+})
+local lualine = require'lualine'
+lualine.setup({
+    sections = {
+        lualine_x = {
+            require('nomodoro').status,
+        }
+    }
+})
+
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
@@ -289,7 +352,7 @@ pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
+vim.keymap.set('n', '<c-b>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -303,17 +366,20 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '[b', ':bprevious<CR>')
+vim.keymap.set('n', ']b', ':bnext<CR>')
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'lua', 'python', 'rust', 'tsx', 'typescript', 'elixir' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
   highlight = { enable = true },
+  file_ignore_patterns = { "node_modules" },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
     enable = true,
@@ -369,6 +435,13 @@ require('nvim-treesitter.configs').setup {
     },
   },
 }
+
+-- BarBar keymaps
+vim.keymap.set('n', '<C-p>', '<Cmd>BufferPin<CR>')
+vim.keymap.set('n', '<Tab>', '<Cmd>BufferNext<CR>')
+vim.keymap.set('n', '<Shift-Tab>', '<Cmd>BufferNext<CR>')
+
+
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic message" })
@@ -427,10 +500,7 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
-  -- gopls = {},
   -- pyright = {},
-  -- rust_analyzer = {},
   -- tsserver = {},
 
   lua_ls = {
@@ -470,8 +540,16 @@ mason_lspconfig.setup_handlers {
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+
+luasnip.config.setup {}
 
 cmp.setup {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -483,6 +561,8 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
       else
         fallback()
       end
@@ -490,14 +570,34 @@ cmp.setup {
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
       else
         fallback()
       end
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' }
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
   },
 }
+
+if vim.g.vscode then
+  vim.cmd.colorscheme = ""
+else
+  -- ordinary Neovim
+end
+
+require("nvim-tree").setup()
+require('gitsigns').setup()
+
+vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
+require('aerial').setup()
+vim.keymap.set('n', '<C-a>', require('aerial').toggle, { desc = "Toggle Aerial view" })
+
+vim.keymap.set('n', '<leader>ha', require('harpoon.mark').add_file, { desc = "[H]arpoon [a] file!" })
+vim.keymap.set('n', '<leader>hs', require('harpoon.mark').add_file, { desc = "[H]arpooned file [s]witch!" })
 -- The line beneath this is called `modeline`. See `:help modeline`
+-- vim: ts=2 sts=2 sw=2 et
 -- vim: ts=2 sts=2 sw=2 et
